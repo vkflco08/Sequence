@@ -2,7 +2,7 @@ package com.example.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/register")
     String getRegister() {
@@ -26,11 +27,10 @@ public class UserController {
         log.info("userid: {}", userid);
 
         if (password.equals(pw_check)) {
-            User user = new User();
+            Member user = new Member();
             user.setUserid(userid);
 
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            String encodedPassword = encoder.encode(password);
+            String encodedPassword = passwordEncoder.encode(password);
             user.setPassword(encodedPassword);
 
             userRepository.save(user);
@@ -40,5 +40,15 @@ public class UserController {
             log.warn("Password mismatch for userid: {}", userid);
             return "redirect:/register";
         }
+    }
+
+    @GetMapping("/login")
+    String getLogin() {
+        return "login.html";
+    }
+
+    @PostMapping("/login")
+    String loginUser() {
+        return "redirect:/";
     }
 }
