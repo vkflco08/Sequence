@@ -1,0 +1,6 @@
+
+CREATE DATABASE IF NOT EXISTS db_login_logout;
+CREATE USER IF NOT EXISTS 'user1'@'%' IDENTIFIED BY 'pass1';
+GRANT ALL PRIVILEGES ON db_login_logout.* TO 'user1'@'%';
+
+FLUSH PRIVILEGES;
